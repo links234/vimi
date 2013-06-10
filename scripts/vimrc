@@ -1,0 +1,52 @@
+set nocompatible
+
+set backspace=indent,eol,start
+set autoindent
+set ruler
+set showcmd
+set hlsearch ignorecase incsearch
+set showmatch
+set background=dark
+set nowrap
+set number
+set tabstop=4
+set shiftwidth=4
+set smartindent
+set autoread
+
+set makeprg=g++\ -O2\ -Wall\ -Wextra\ -lm\ -static\ -o\ %<\ %
+
+map <F2> <ESC>:w<CR>
+map <F3> <ESC>:tabnew<CR>:e 
+map <F4> <ESC>:q!<CR>
+map <F5> <ESC>:tabprev<CR>
+map <F6> <ESC>:tabnext<CR>
+map <F7> <ESC>:w<CR>:make<CR>
+map <F8> <ESC>:!time ./%<<CR>
+map <F9> <ESC>:w<CR>:make<CR>:!time ./%<<CR>
+
+imap <F2> <ESC>:w<CR>a
+imap <F3> <ESC>:tabnew<CR>:e 
+imap <F4> <ESC>:q!<CR>
+imap <F5> <ESC>:tabprev<CR>i
+imap <F6> <ESC>:tabnext<CR>i
+imap <F7> <ESC>:w<CR>:make<CR>
+imap <F8> <ESC>:!time ./%<<CR>
+imap <F9> <ESC>:w<CR>:make<CR>:!time ./%<<CR>
+
+function! CurlyBracketComplete()
+    if getline('.') =~ '\s*\<\(class\)|\(struct\)\>.*'
+        return "{\<CR>};\<ESC>O"
+    else
+        return "{\<CR>}\<ESC>O"
+endfunction
+inoremap {<CR> <C-R>=CurlyBracketComplete()<CR>
+
+function! TabComplete()
+    if col('.') > 1 && strpart(getline('.'), col('.')-2, 3) =~ '^\w'
+        return "\<C-N>"
+    else
+        return "\<TAB>"
+endfunction
+set completeopt=longest,menu
+inoremap <TAB> <C-R>=TabComplete()<CR>
